@@ -88,10 +88,34 @@ cd QuizTestApp
 ```
 
 
-2. Install dependencies:
+2. Install:
 ```
+Node.js install
 npm install
+npm install -g expo-cli
+
 ```
+
+
+2.A Future-এ Template chooser:
+
+- JavaScript Blank: ***
+```
+npx create-expo-app QuizTestApp --template blank
+```
+
+- TypeScript:
+```
+npx create-expo-app QuizTestApp --template blank-typescript
+```
+
+- Tabs:
+```
+npx create-expo-app QuizTestApp --template tabs
+```
+
+
+
 
 3. Run the app (Expo):
 ```
