@@ -83,20 +83,20 @@ touch src/components/OptionButton.js
 1. Clone the repo:
 
 ```bash
-git clone https://github.com/<your-username>/QuizTestApp.git
+git clone https://github.com/kibria-khandaker/QuizTestApp.git
 cd QuizTestApp
-
+```
 
 
 2. Install dependencies:
 ```
 npm install
-
+```
 
 3. Run the app (Expo):
 ```
 npx expo start
-
+```
 
 4. Open on your device:
 
@@ -106,7 +106,7 @@ Android: Scan QR code with Expo Go app
 iOS: Scan QR code with Expo Go app or use TestFlight
 
 Web: Press w in terminal
-
+```
 
 Create Initial Files (if needed)
 ```
