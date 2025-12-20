@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { questions } from '../data/questions';
 import OptionButton from '../components/OptionButton';
@@ -9,6 +9,16 @@ export default function QuizScreen({ setScore, finishQuiz }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
   const [isAnswered, setIsAnswered] = useState(false);
+  const [timer, setTimer] = useState(10);
+
+  useEffect(() => {
+    if (timer === 0) {
+      moveNext();
+      return;
+    }
+    const interval = setInterval(() => setTimer(prev => prev - 1), 1000);
+    return () => clearInterval(interval);
+  }, [timer]);
 
   const handleAnswer = (option) => {
     setSelectedOption(option);
@@ -18,16 +28,19 @@ export default function QuizScreen({ setScore, finishQuiz }) {
       setScore(prev => prev + 1);
     }
 
-    setTimeout(() => {
-      setSelectedOption(null);
-      setIsAnswered(false);
+    setTimeout(() => moveNext(), 1000);
+  };
 
-      if (currentIndex + 1 < questions.length) {
-        setCurrentIndex(currentIndex + 1);
-      } else {
-        finishQuiz(true);
-      }
-    }, 1000);
+  const moveNext = () => {
+    setSelectedOption(null);
+    setIsAnswered(false);
+    setTimer(10);
+
+    if (currentIndex + 1 < questions.length) {
+      setCurrentIndex(currentIndex + 1);
+    } else {
+      finishQuiz(true);
+    }
   };
 
   const getOptionColor = (option) => {
@@ -40,6 +53,7 @@ export default function QuizScreen({ setScore, finishQuiz }) {
   return (
     <View style={styles.container}>
       <View style={styles.card}>
+        <Text style={styles.timer}>Time: {timer}s</Text>
         <Text style={styles.question}>{questions[currentIndex].question}</Text>
 
         {questions[currentIndex].options.map((option, index) => (
@@ -72,6 +86,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
+  timer: { fontSize: 18, color: 'red', textAlign: 'center', marginBottom: 10 },
   question: { fontSize: 22, marginBottom: 20, textAlign: 'center' },
   progress: { marginTop: 20, textAlign: 'center', color: 'gray' },
 });
