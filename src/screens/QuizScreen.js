@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, Vibration } from 'react-native';
+import { Audio } from 'expo-av';
 import { questions } from '../data/questions';
 import OptionButton from '../components/OptionButton';
 
@@ -11,6 +12,7 @@ export default function QuizScreen({ setScore, finishQuiz }) {
   const [isAnswered, setIsAnswered] = useState(false);
   const [timer, setTimer] = useState(10);
 
+  // Timer countdown
   useEffect(() => {
     if (timer === 0) {
       moveNext();
@@ -20,17 +22,42 @@ export default function QuizScreen({ setScore, finishQuiz }) {
     return () => clearInterval(interval);
   }, [timer]);
 
-  const handleAnswer = (option) => {
+  // Play sound function
+  const playSound = async (correct) => {
+    try {
+      const soundObject = new Audio.Sound();
+      await soundObject.loadAsync(
+        correct
+          ? require('../../assets/correct.mp3')
+          : require('../../assets/wrong.mp3')
+      );
+      await soundObject.playAsync();
+    } catch (err) {
+      console.log('Error playing sound:', err);
+    }
+  };
+
+  // Handle answer selection
+  const handleAnswer = async (option) => {
+    if (isAnswered) return; // Prevent multiple taps
+
     setSelectedOption(option);
     setIsAnswered(true);
 
-    if (option === questions[currentIndex].correctAnswer) {
-      setScore(prev => prev + 1);
-    }
+    const correct = option === questions[currentIndex].correctAnswer;
+    if (correct) setScore(prev => prev + 1);
 
+    // Vibration
+    Vibration.vibrate(500);
+
+    // Sound
+    await playSound(correct);
+
+    // Move to next question after 1 second
     setTimeout(() => moveNext(), 1000);
   };
 
+  // Move to next question
   const moveNext = () => {
     setSelectedOption(null);
     setIsAnswered(false);
@@ -43,6 +70,7 @@ export default function QuizScreen({ setScore, finishQuiz }) {
     }
   };
 
+  // Determine option color
   const getOptionColor = (option) => {
     if (!isAnswered) return '#4CAF50';
     if (option === questions[currentIndex].correctAnswer) return 'green';
@@ -73,6 +101,7 @@ export default function QuizScreen({ setScore, finishQuiz }) {
   );
 }
 
+// Styles
 const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#f2f2f2' },
   card: {
