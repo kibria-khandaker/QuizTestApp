@@ -2,12 +2,15 @@
 
 # dependencies
 node_modules/
+npm-debug.log
 
 # Expo
 .expo/
 dist/
 web-build/
 expo-env.d.ts
+.expo-shared/
+
 
 # Native
 .kotlin/
@@ -39,3 +42,8 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+web-build/
+
+# Misc
+.DS_Store
+.env
