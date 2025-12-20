@@ -15,23 +15,37 @@ QuizTest/
 
 🔹Folder Structure
 `
-mkdir src
-mkdir src\data
-mkdir src\screens
-mkdir src\components
+ src
+ src\data
+ src\screens
+ src\components
+`
+
+🔹Folder and files Structure
+`
+src/data/questions.js
+src/screens/QuizScreen.js
+src/screens/ResultScreen.js
+src/components/OptionButton.js
 
 `
 
 🔹Final structure:
 `
-QuizTest/
+QuizTestApp/
 │
 ├── App.js
 │
 ├── src/
 │   ├── data/
+│   │   └── questions.js
+│   │
 │   ├── screens/
+│   │   ├── QuizScreen.js
+│   │   └── ResultScreen.js
+│   │
 │   └── components/
+│       └── OptionButton.js
 │
 └── package.json
 
