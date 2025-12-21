@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  ActivityIndicator,
+} from 'react-native';
+
 import QuizScreen from './QuizScreen';
 import { styles } from './CategoryScreen.styles';
-import { fetchAllCategories } from '../data/questionsData'; // ✅ Import
+import { fetchAllCategories } from '../data/questionsData';
 
 /* 🔀 Random shuffle helper */
 const shuffleArray = (array) => {
@@ -19,15 +26,8 @@ export default function CategoryScreen({ goToHome }) {
   const [selectedExamIndex, setSelectedExamIndex] = useState(null);
   const [currentQuiz, setCurrentQuiz] = useState(null);
 
-  const [categories, setCategories] = useState({
-    'General Knowledge': [],
-    Sports: [],
-    IT: [],
-  });
+  const [categories, setCategories] = useState({});
   const [loading, setLoading] = useState(true);
-
-  const perExam = 10;
-  const FINAL_EXAM_QUESTIONS = 20;
 
   /* ---------------- FETCH DATA ---------------- */
   useEffect(() => {
@@ -50,9 +50,10 @@ export default function CategoryScreen({ goToHome }) {
     );
   }
 
+  /* ---------------- LOADING ---------------- */
   if (loading) {
     return (
-      <View style={{ flex:1, justifyContent:'center', alignItems:'center' }}>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <ActivityIndicator size="large" color="#007bff" />
         <Text>Loading quizzes...</Text>
       </View>
@@ -61,7 +62,12 @@ export default function CategoryScreen({ goToHome }) {
 
   /* ---------------- EXAM LIST SCREEN ---------------- */
   if (selectedCategory) {
-    const questions = categories[selectedCategory];
+    const categoryData = categories[selectedCategory];
+
+    const questions = categoryData.questions;
+    const perExam = categoryData.perExam;
+    const FINAL_EXAM_QUESTIONS = categoryData.finalExamQuestions;
+
     const totalQuestions = questions.length;
     const fullExams = Math.floor(totalQuestions / perExam);
     const remainingQuestions = totalQuestions % perExam;
@@ -72,9 +78,11 @@ export default function CategoryScreen({ goToHome }) {
     return (
       <ScrollView style={styles.container}>
         <Text style={styles.CategoryTitle}>Quiz Test App</Text>
-        <Text style={styles.CategorySubtitle}>Select your Exam </Text>
+        <Text style={styles.CategorySubtitle}>Select your Exam</Text>
+
         <Text style={styles.categoryCardTitle}>{selectedCategory}</Text>
 
+        {/* ---------- EXAMS ---------- */}
         {exams.map((examIndex) => {
           const start = examIndex * perExam;
           const end = Math.min(start + perExam, totalQuestions);
@@ -94,6 +102,7 @@ export default function CategoryScreen({ goToHome }) {
           );
         })}
 
+        {/* ---------- START EXAM ---------- */}
         {selectedExamIndex !== null && (
           <TouchableOpacity
             style={styles.startButton}
@@ -108,9 +117,10 @@ export default function CategoryScreen({ goToHome }) {
         )}
 
         <Text style={styles.CategoryFinalBtnText}>
-          It will best after practicing all exam text
+          It will be best after practicing all exams
         </Text>
 
+        {/* ---------- FINAL EXAM ---------- */}
         <TouchableOpacity
           style={styles.finalExamButton}
           onPress={() => {
@@ -137,7 +147,9 @@ export default function CategoryScreen({ goToHome }) {
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.CategoryTitle}>Quiz Test App</Text>
-      <Text style={styles.CategorySubtitle}>Select your category for exam </Text>
+      <Text style={styles.CategorySubtitle}>
+        Select your category for exam
+      </Text>
 
       {Object.keys(categories).map((category) => (
         <TouchableOpacity
@@ -146,7 +158,9 @@ export default function CategoryScreen({ goToHome }) {
           onPress={() => setSelectedCategory(category)}
         >
           <Text style={styles.categoryCardTitle}>{category}</Text>
-          <Text>Total Questions: {categories[category].length}</Text>
+          <Text>
+            Total Questions: {categories[category].questions.length}
+          </Text>
         </TouchableOpacity>
       ))}
 
