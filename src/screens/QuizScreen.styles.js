@@ -16,6 +16,25 @@ export default StyleSheet.create({
 
   progress: { fontSize: 14, color: '#555' },
 
+  SoundToggleBtn: {
+    marginLeft: 10,
+    padding: 8,
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  soundToggleBtnSoundOn: {
+    backgroundColor: '#4CAF50',
+  },
+
+  soundToggleBtnSoundOff: {
+    backgroundColor: '#b9b9b9ff',
+  },
+
+
+
+
 
   QuestionTitle:{
       fontSize: 22,

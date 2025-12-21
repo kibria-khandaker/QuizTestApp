@@ -53,8 +53,8 @@ export default function CategoryScreen({ goToHome }) {
     return (
       <ScrollView style={styles.container}>
 
-      <Text style={styles.CategoryTitle}>Quiz Test App</Text>
-      <Text style={styles.CategorySubtitle}>Select your Exam </Text>
+        <Text style={styles.CategoryTitle}>Quiz Test App</Text>
+        <Text style={styles.CategorySubtitle}>Select your Exam </Text>
 
         <Text style={styles.categoryCardTitle}>{selectedCategory}</Text>
 
@@ -92,7 +92,8 @@ export default function CategoryScreen({ goToHome }) {
           </TouchableOpacity>
         )}
 
-      <Text style={styles.CategoryFinalBtnText}>It will best after practicing all exam text </Text>
+        <Text style={styles.CategoryFinalBtnText}>It will best after practicing all exam text </Text>
+
         {/* 🔥 FINAL EXAM */}
         <TouchableOpacity
           style={styles.finalExamButton}
@@ -108,10 +109,10 @@ export default function CategoryScreen({ goToHome }) {
             🎯 Final Exam ({FINAL_EXAM_QUESTIONS} Questions)
           </Text>
         </TouchableOpacity>
-        
-        {/* Back to Home */}
-        <TouchableOpacity onPress={goToHome}>
-          <Text style={styles.backButton}>← Back to Home</Text>
+
+        {/* Back to Category List */}
+        <TouchableOpacity onPress={() => setSelectedCategory(null)}>
+          <Text style={styles.backButton}>← Back to Categories</Text>
         </TouchableOpacity>
 
       </ScrollView>

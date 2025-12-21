@@ -7,7 +7,7 @@ import {
   Alert
 } from 'react-native';
 import { Audio } from 'expo-av';
-
+import { MaterialIcons } from '@expo/vector-icons';
 import ResultScreen from './ResultScreen';
 import styles from './QuizScreen.styles';
 
@@ -18,6 +18,9 @@ export default function QuizScreen({ questions, goBack }) {
   const [score, setScore] = useState(0);
   const [showResult, setShowResult] = useState(false);
   const [timeLeft, setTimeLeft] = useState(questions.length * 15);
+
+  // ✅ New state for sound control
+  const [isSoundOn, setIsSoundOn] = useState(true);
 
   const currentQuestion = questions[current];
 
@@ -39,6 +42,7 @@ export default function QuizScreen({ questions, goBack }) {
 
   /* ---------------- SOUND ---------------- */
   const playCorrectSound = async () => {
+    if (!isSoundOn) return; // 🔇 Mute check
     const { sound } = await Audio.Sound.createAsync(
       require('../../assets/sounds/correct.mp3')
     );
@@ -46,6 +50,7 @@ export default function QuizScreen({ questions, goBack }) {
   };
 
   const playWrongSound = async () => {
+    if (!isSoundOn) return; // 🔇 Mute check
     const { sound } = await Audio.Sound.createAsync(
       require('../../assets/sounds/wrong.mp3')
     );
@@ -102,26 +107,51 @@ export default function QuizScreen({ questions, goBack }) {
   return (
     <ScrollView style={styles.container}>
 
-            <Text style={styles.QuestionTitle}>Quiz Test App</Text>
-            <Text style={styles.QuestionSubtitle}>Select your question for exam </Text>
+      <Text style={styles.QuestionTitle}>Quiz Test App</Text>
+      <Text style={styles.QuestionSubtitle}>Select your question for exam </Text>
 
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.progress}>
-          Question {current + 1} / {questions.length}
-        </Text>
-
-        <Text style={styles.timer}>⏱ {timeLeft}s</Text>
-
         <TouchableOpacity onPress={handleCancelExam}>
           <Text style={styles.cancelText}>✖ Cancel</Text>
         </TouchableOpacity>
+        <Text style={styles.timer}>⏱ {timeLeft}s</Text>
       </View>
 
+      
+      <View style={styles.header}>
+
+        <Text style={styles.progress}>
+          Question {current + 1} / {questions.length}
+        </Text>
+        
+        {/* 🔊 Sound Toggle */}
+        <TouchableOpacity
+          onPress={() => setIsSoundOn(prev => !prev)}
+          style={[
+            styles.SoundToggleBtn,
+            isSoundOn ? styles.soundToggleBtnSoundOn : styles.soundToggleBtnSoundOff
+          ]}
+        >
+          {isSoundOn ? (
+            <MaterialIcons name="volume-up" size={24} color="white" />
+          ) : (
+            <MaterialIcons name="volume-off" size={24} color="white" />
+          )}
+        </TouchableOpacity>
+
+
+
+
+
+      </View>
+
+      {/* Question */}
       <Text style={styles.question}>
         {current + 1}. {currentQuestion.question}
       </Text>
 
+      {/* Options */}
       {currentQuestion.options.map((option, index) => (
         <TouchableOpacity
           key={index}
