@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { generalKnowledge } from '../data/generalKnowledge';
 import { sports } from '../data/sports';
 import { it } from '../data/it';
 import QuizScreen from './QuizScreen';
+import { styles } from './CategoryScreen.styles';
 
 /* 🔀 Random shuffle helper */
 const shuffleArray = (array) => {
@@ -21,13 +22,13 @@ export default function CategoryScreen({ goToHome }) {
   const [currentQuiz, setCurrentQuiz] = useState(null);
 
   const allCategories = {
-    "General Knowledge": generalKnowledge,
-    "Sports": sports,
-    "IT": it
+    'General Knowledge': generalKnowledge,
+    Sports: sports,
+    IT: it,
   };
 
   const perExam = 10;
-  const FINAL_EXAM_QUESTIONS = 20; // 🔥 Final Exam question count
+  const FINAL_EXAM_QUESTIONS = 20;
 
   /* Quiz Screen */
   if (currentQuiz) {
@@ -51,12 +52,11 @@ export default function CategoryScreen({ goToHome }) {
 
     return (
       <ScrollView style={styles.container}>
-        {/* Back to Home */}
-        <TouchableOpacity onPress={goToHome}>
-          <Text style={styles.backButton}>← Back to Home</Text>
-        </TouchableOpacity>
 
-        <Text style={styles.categoryTitle}>{selectedCategory}</Text>
+      <Text style={styles.CategoryTitle}>Quiz Test App</Text>
+      <Text style={styles.CategorySubtitle}>Select your Exam </Text>
+
+        <Text style={styles.categoryCardTitle}>{selectedCategory}</Text>
 
         {/* Normal Exams */}
         {exams.map((examIndex) => {
@@ -69,7 +69,7 @@ export default function CategoryScreen({ goToHome }) {
               key={examIndex}
               style={[
                 styles.examButton,
-                selectedExamIndex === examIndex && styles.examSelected
+                selectedExamIndex === examIndex && styles.examSelected,
               ]}
               onPress={() => setSelectedExamIndex(examIndex)}
             >
@@ -92,13 +92,15 @@ export default function CategoryScreen({ goToHome }) {
           </TouchableOpacity>
         )}
 
+      <Text style={styles.CategoryFinalBtnText}>It will best after practicing all exam text </Text>
         {/* 🔥 FINAL EXAM */}
         <TouchableOpacity
           style={styles.finalExamButton}
           onPress={() => {
-            const randomQuestions = shuffleArray(questions)
-              .slice(0, FINAL_EXAM_QUESTIONS);
-
+            const randomQuestions = shuffleArray(questions).slice(
+              0,
+              FINAL_EXAM_QUESTIONS
+            );
             setCurrentQuiz(randomQuestions);
           }}
         >
@@ -106,6 +108,12 @@ export default function CategoryScreen({ goToHome }) {
             🎯 Final Exam ({FINAL_EXAM_QUESTIONS} Questions)
           </Text>
         </TouchableOpacity>
+        
+        {/* Back to Home */}
+        <TouchableOpacity onPress={goToHome}>
+          <Text style={styles.backButton}>← Back to Home</Text>
+        </TouchableOpacity>
+
       </ScrollView>
     );
   }
@@ -113,91 +121,26 @@ export default function CategoryScreen({ goToHome }) {
   /* Category List Screen */
   return (
     <ScrollView style={styles.container}>
-      {/* Back to Home */}
-      <TouchableOpacity onPress={goToHome}>
-        <Text style={styles.backButton}>← Back to Home</Text>
-      </TouchableOpacity>
 
-      {Object.keys(allCategories).map(category => (
+      <Text style={styles.CategoryTitle}>Quiz Test App</Text>
+      <Text style={styles.CategorySubtitle}>Select your category for exam </Text>
+
+      {Object.keys(allCategories).map((category) => (
         <TouchableOpacity
           key={category}
           style={styles.categoryCard}
           onPress={() => setSelectedCategory(category)}
         >
-          <Text style={styles.categoryTitle}>{category}</Text>
+          <Text style={styles.categoryCardTitle}>{category}</Text>
           <Text>Total Questions: {allCategories[category].length}</Text>
         </TouchableOpacity>
       ))}
+
+      {/* Back to Home */}
+      <TouchableOpacity onPress={goToHome}>
+        <Text style={styles.backButton}>← Back to Home</Text>
+      </TouchableOpacity>
+
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, backgroundColor: '#f2f2f2' },
-
-  categoryCard: {
-    backgroundColor: '#fff',
-    padding: 15,
-    marginBottom: 15,
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 3
-  },
-
-  categoryTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 5
-  },
-
-  backButton: {
-    fontSize: 16,
-    color: '#007bff',
-    marginBottom: 10
-  },
-
-  examButton: {
-    padding: 12,
-    backgroundColor: '#eee',
-    borderRadius: 8,
-    marginBottom: 10
-  },
-
-  examSelected: {
-    backgroundColor: '#4CAF50'
-  },
-
-  examText: {
-    fontSize: 16
-  },
-
-  startButton: {
-    marginTop: 15,
-    padding: 12,
-    backgroundColor: '#007bff',
-    borderRadius: 8
-  },
-
-  startText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    textAlign: 'center'
-  },
-
-  /* 🔥 Final Exam Style */
-  finalExamButton: {
-    marginTop: 25,
-    padding: 15,
-    backgroundColor: '#FF9800',
-    borderRadius: 10
-  },
-
-  finalExamText: {
-    color: '#fff',
-    fontSize: 17,
-    fontWeight: 'bold',
-    textAlign: 'center'
-  }
-});

@@ -3,13 +3,13 @@ import {
   View,
   Text,
   TouchableOpacity,
-  StyleSheet,
   ScrollView,
   Alert
 } from 'react-native';
 import { Audio } from 'expo-av';
 
 import ResultScreen from './ResultScreen';
+import styles from './QuizScreen.styles';
 
 export default function QuizScreen({ questions, goBack }) {
   const [current, setCurrent] = useState(0);
@@ -17,8 +17,6 @@ export default function QuizScreen({ questions, goBack }) {
   const [showAnswer, setShowAnswer] = useState(false);
   const [score, setScore] = useState(0);
   const [showResult, setShowResult] = useState(false);
-
-  // ⏱ Timer (per exam)
   const [timeLeft, setTimeLeft] = useState(questions.length * 15);
 
   const currentQuestion = questions[current];
@@ -42,7 +40,6 @@ export default function QuizScreen({ questions, goBack }) {
   /* ---------------- SOUND ---------------- */
   const playCorrectSound = async () => {
     const { sound } = await Audio.Sound.createAsync(
-      // require('../assets/sounds/correct.mp3')
       require('../../assets/sounds/correct.mp3')
     );
     await sound.playAsync();
@@ -104,6 +101,10 @@ export default function QuizScreen({ questions, goBack }) {
 
   return (
     <ScrollView style={styles.container}>
+
+            <Text style={styles.QuestionTitle}>Quiz Test App</Text>
+            <Text style={styles.QuestionSubtitle}>Select your question for exam </Text>
+
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.progress}>
@@ -126,16 +127,8 @@ export default function QuizScreen({ questions, goBack }) {
           key={index}
           style={[
             styles.option,
-
-            // ✅ Correct always green after answer
-            showAnswer &&
-              option === currentQuestion.correctAnswer &&
-              styles.correct,
-
-            // ❌ Wrong selected red
-            selected === option &&
-              option !== currentQuestion.correctAnswer &&
-              styles.wrong
+            showAnswer && option === currentQuestion.correctAnswer && styles.correct,
+            selected === option && option !== currentQuestion.correctAnswer && styles.wrong
           ]}
           onPress={() => handleOptionPress(option)}
           disabled={showAnswer}
@@ -153,75 +146,10 @@ export default function QuizScreen({ questions, goBack }) {
       {showAnswer && (
         <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
           <Text style={styles.nextText}>
-            {current === questions.length - 1
-              ? "Finish Exam"
-              : "Next Question"}
+            {current === questions.length - 1 ? "Finish Exam" : "Next Question"}
           </Text>
         </TouchableOpacity>
       )}
     </ScrollView>
   );
 }
-
-/* ---------------- STYLES ---------------- */
-
-const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20 },
-
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 15
-  },
-
-  progress: { fontSize: 14, color: '#555' },
-
-  timer: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: '#E91E63'
-  },
-
-  cancelText: {
-    color: '#F44336',
-    fontWeight: 'bold'
-  },
-
-  question: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 20
-  },
-
-  option: {
-    padding: 15,
-    marginVertical: 8,
-    backgroundColor: '#eee',
-    borderRadius: 8
-  },
-
-  optionText: { fontSize: 16 },
-
-  correct: { backgroundColor: '#4CAF50' },
-  wrong: { backgroundColor: '#F44336' },
-
-  answerText: {
-    marginTop: 15,
-    fontSize: 16,
-    fontWeight: 'bold'
-  },
-
-  nextButton: {
-    marginTop: 20,
-    padding: 12,
-    backgroundColor: '#007bff',
-    borderRadius: 8
-  },
-
-  nextText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    textAlign: 'center'
-  }
-});
