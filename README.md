@@ -97,7 +97,7 @@ npm install -g expo-cli
 ```
 
 
-2.A Future-এ Template chooser:
+2.A Template choose For which installation for your:
 
 - JavaScript Blank: ***
 ```

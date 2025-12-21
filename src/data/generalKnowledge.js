@@ -1,6 +1,5 @@
-export const questionsData = {
-"General Knowledge": [
-  {
+export const generalKnowledge = [
+ {
     question: "What is the capital of France?",
     options: ["Paris", "London", "Berlin", "Rome"],
     correctAnswer: "Paris",
@@ -100,31 +99,5 @@ export const questionsData = {
     options: ["Guitar", "Piano", "Violin", "Drum"],
     correctAnswer: "Piano",
   }
-],
-  "Sports": [
-    {
-      question: "How many players are in a football team?",
-      options: ["9", "10", "11", "12"],
-      correctAnswer: "11",
-    },
-    {
-      question: "Which sport uses a shuttlecock?",
-      options: ["Tennis", "Cricket", "Badminton", "Football"],
-      correctAnswer: "Badminton",
-    },
-    // Add more questions...
-  ],
-  "IT": [
-    {
-      question: "HTML stands for?",
-      options: ["Hyper Text Markup Language", "Hyperlinks", "Hyper Tool", "None"],
-      correctAnswer: "Hyper Text Markup Language",
-    },
-    {
-      question: "CSS is used for?",
-      options: ["Structure", "Style", "Logic", "Database"],
-      correctAnswer: "Style",
-    },
-    // Add more questions...
-  ],
-};
+  // ... add more questions as needed
+];

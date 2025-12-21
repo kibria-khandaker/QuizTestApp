@@ -1,29 +1,34 @@
 import React, { useState } from 'react';
-import { StatusBar } from 'react-native';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import QuizScreen from './src/screens/QuizScreen';
-import ResultScreen from './src/screens/ResultScreen';
+import { View } from 'react-native';
+
+import HomeScreen from './src/screens/HomeScreen';
+import CategoryScreen from './src/screens/CategoryScreen';
+import AboutScreen from './src/screens/AboutScreen'; // ← এখন ব্যবহার হচ্ছে
 
 export default function App() {
-  const [score, setScore] = useState(0);
-  const [quizFinished, setQuizFinished] = useState(false);
+  const [screen, setScreen] = useState('home');
 
-  const finishQuiz = () => setQuizFinished(true);
-  const restartQuiz = () => {
-    setScore(0);
-    setQuizFinished(false);
-  };
+  // navigation functions
+  const navigateToCategory = () => setScreen('category');
+  const goToHome = () => setScreen('home');
+  const goToAbout = () => setScreen('about');
 
   return (
-    <SafeAreaProvider>
-      <SafeAreaView style={{ flex: 1 }}>
-        <StatusBar barStyle="dark-content" />
-        {!quizFinished ? (
-          <QuizScreen setScore={setScore} finishQuiz={finishQuiz} />
-        ) : (
-          <ResultScreen score={score} restartQuiz={restartQuiz} />
-        )}
-      </SafeAreaView>
-    </SafeAreaProvider>
+    <View style={{ flex: 1 }}>
+      {screen === 'home' && (
+        <HomeScreen
+          navigateToCategory={navigateToCategory}
+          goToAbout={goToAbout}
+        />
+      )}
+
+      {screen === 'category' && (
+        <CategoryScreen goToHome={goToHome} />
+      )}
+
+      {screen === 'about' && (
+        <AboutScreen goBack={goToHome} />
+      )}
+    </View>
   );
 }

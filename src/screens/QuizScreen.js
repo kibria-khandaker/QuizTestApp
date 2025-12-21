@@ -1,121 +1,227 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Dimensions, Vibration } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  Alert
+} from 'react-native';
 import { Audio } from 'expo-av';
-import { questions } from '../data/questions';
-import OptionButton from '../components/OptionButton';
 
-const { width } = Dimensions.get('window');
+import ResultScreen from './ResultScreen';
 
-export default function QuizScreen({ setScore, finishQuiz }) {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [selectedOption, setSelectedOption] = useState(null);
-  const [isAnswered, setIsAnswered] = useState(false);
-  const [timer, setTimer] = useState(10);
+export default function QuizScreen({ questions, goBack }) {
+  const [current, setCurrent] = useState(0);
+  const [selected, setSelected] = useState(null);
+  const [showAnswer, setShowAnswer] = useState(false);
+  const [score, setScore] = useState(0);
+  const [showResult, setShowResult] = useState(false);
 
-  // Timer countdown
+  // ⏱ Timer (per exam)
+  const [timeLeft, setTimeLeft] = useState(questions.length * 15);
+
+  const currentQuestion = questions[current];
+
+  /* ---------------- TIMER ---------------- */
   useEffect(() => {
-    if (timer === 0) {
-      moveNext();
+    if (showResult) return;
+
+    if (timeLeft === 0) {
+      setShowResult(true);
       return;
     }
-    const interval = setInterval(() => setTimer(prev => prev - 1), 1000);
-    return () => clearInterval(interval);
-  }, [timer]);
 
-  // Play sound function
-  const playSound = async (correct) => {
-    try {
-      const soundObject = new Audio.Sound();
-      await soundObject.loadAsync(
-        correct
-          ? require('../../assets/correct.mp3')
-          : require('../../assets/wrong.mp3')
-      );
-      await soundObject.playAsync();
-    } catch (err) {
-      console.log('Error playing sound:', err);
-    }
+    const timer = setInterval(() => {
+      setTimeLeft(prev => prev - 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [timeLeft, showResult]);
+
+  /* ---------------- SOUND ---------------- */
+  const playCorrectSound = async () => {
+    const { sound } = await Audio.Sound.createAsync(
+      // require('../assets/sounds/correct.mp3')
+      require('../../assets/sounds/correct.mp3')
+    );
+    await sound.playAsync();
   };
 
-  // Handle answer selection
-  const handleAnswer = async (option) => {
-    if (isAnswered) return; // Prevent multiple taps
-
-    setSelectedOption(option);
-    setIsAnswered(true);
-
-    const correct = option === questions[currentIndex].correctAnswer;
-    if (correct) setScore(prev => prev + 1);
-
-    // Vibration
-    Vibration.vibrate(500);
-
-    // Sound
-    await playSound(correct);
-
-    // Move to next question after 1 second
-    setTimeout(() => moveNext(), 1000);
+  const playWrongSound = async () => {
+    const { sound } = await Audio.Sound.createAsync(
+      require('../../assets/sounds/wrong.mp3')
+    );
+    await sound.playAsync();
   };
 
-  // Move to next question
-  const moveNext = () => {
-    setSelectedOption(null);
-    setIsAnswered(false);
-    setTimer(10);
+  /* ---------------- OPTION PRESS ---------------- */
+  const handleOptionPress = (option) => {
+    setSelected(option);
+    setShowAnswer(true);
 
-    if (currentIndex + 1 < questions.length) {
-      setCurrentIndex(currentIndex + 1);
+    if (option === currentQuestion.correctAnswer) {
+      setScore(prev => prev + 1);
+      playCorrectSound();
     } else {
-      finishQuiz(true);
+      playWrongSound();
     }
   };
 
-  // Determine option color
-  const getOptionColor = (option) => {
-    if (!isAnswered) return '#4CAF50';
-    if (option === questions[currentIndex].correctAnswer) return 'green';
-    if (option === selectedOption && option !== questions[currentIndex].correctAnswer) return 'red';
-    return '#4CAF50';
+  /* ---------------- NEXT ---------------- */
+  const handleNext = () => {
+    setSelected(null);
+    setShowAnswer(false);
+
+    if (current < questions.length - 1) {
+      setCurrent(current + 1);
+    } else {
+      setShowResult(true);
+    }
   };
+
+  /* ---------------- CANCEL EXAM ---------------- */
+  const handleCancelExam = () => {
+    Alert.alert(
+      "Cancel Exam?",
+      "Are you sure you want to cancel this exam?",
+      [
+        { text: "No", style: "cancel" },
+        { text: "Yes, Cancel", style: "destructive", onPress: goBack }
+      ]
+    );
+  };
+
+  /* ---------------- RESULT ---------------- */
+  if (showResult) {
+    return (
+      <ResultScreen
+        score={score}
+        restartQuiz={goBack}
+      />
+    );
+  }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.card}>
-        <Text style={styles.timer}>Time: {timer}s</Text>
-        <Text style={styles.question}>{questions[currentIndex].question}</Text>
-
-        {questions[currentIndex].options.map((option, index) => (
-          <OptionButton
-            key={index}
-            text={option}
-            onPress={() => handleAnswer(option)}
-            backgroundColor={getOptionColor(option)}
-          />
-        ))}
-
+    <ScrollView style={styles.container}>
+      {/* Header */}
+      <View style={styles.header}>
         <Text style={styles.progress}>
-          Question {currentIndex + 1} of {questions.length}
+          Question {current + 1} / {questions.length}
         </Text>
+
+        <Text style={styles.timer}>⏱ {timeLeft}s</Text>
+
+        <TouchableOpacity onPress={handleCancelExam}>
+          <Text style={styles.cancelText}>✖ Cancel</Text>
+        </TouchableOpacity>
       </View>
-    </View>
+
+      <Text style={styles.question}>
+        {current + 1}. {currentQuestion.question}
+      </Text>
+
+      {currentQuestion.options.map((option, index) => (
+        <TouchableOpacity
+          key={index}
+          style={[
+            styles.option,
+
+            // ✅ Correct always green after answer
+            showAnswer &&
+              option === currentQuestion.correctAnswer &&
+              styles.correct,
+
+            // ❌ Wrong selected red
+            selected === option &&
+              option !== currentQuestion.correctAnswer &&
+              styles.wrong
+          ]}
+          onPress={() => handleOptionPress(option)}
+          disabled={showAnswer}
+        >
+          <Text style={styles.optionText}>{option}</Text>
+        </TouchableOpacity>
+      ))}
+
+      {showAnswer && (
+        <Text style={styles.answerText}>
+          Correct Answer: {currentQuestion.correctAnswer}
+        </Text>
+      )}
+
+      {showAnswer && (
+        <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
+          <Text style={styles.nextText}>
+            {current === questions.length - 1
+              ? "Finish Exam"
+              : "Next Question"}
+          </Text>
+        </TouchableOpacity>
+      )}
+    </ScrollView>
   );
 }
 
-// Styles
+/* ---------------- STYLES ---------------- */
+
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#f2f2f2' },
-  card: {
-    width: width - 40,
-    backgroundColor: '#fff',
-    padding: 20,
-    borderRadius: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 5,
+  container: { flex: 1, padding: 20 },
+
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 15
   },
-  timer: { fontSize: 18, color: 'red', textAlign: 'center', marginBottom: 10 },
-  question: { fontSize: 22, marginBottom: 20, textAlign: 'center' },
-  progress: { marginTop: 20, textAlign: 'center', color: 'gray' },
+
+  progress: { fontSize: 14, color: '#555' },
+
+  timer: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#E91E63'
+  },
+
+  cancelText: {
+    color: '#F44336',
+    fontWeight: 'bold'
+  },
+
+  question: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 20
+  },
+
+  option: {
+    padding: 15,
+    marginVertical: 8,
+    backgroundColor: '#eee',
+    borderRadius: 8
+  },
+
+  optionText: { fontSize: 16 },
+
+  correct: { backgroundColor: '#4CAF50' },
+  wrong: { backgroundColor: '#F44336' },
+
+  answerText: {
+    marginTop: 15,
+    fontSize: 16,
+    fontWeight: 'bold'
+  },
+
+  nextButton: {
+    marginTop: 20,
+    padding: 12,
+    backgroundColor: '#007bff',
+    borderRadius: 8
+  },
+
+  nextText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    textAlign: 'center'
+  }
 });
