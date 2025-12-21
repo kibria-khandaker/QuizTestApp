@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
-import { generalKnowledge } from '../data/generalKnowledge';
-import { sports } from '../data/sports';
-import { it } from '../data/it';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import QuizScreen from './QuizScreen';
 import { styles } from './CategoryScreen.styles';
+import { fetchAllCategories } from '../data/questionsData'; // ✅ Import
 
 /* 🔀 Random shuffle helper */
 const shuffleArray = (array) => {
@@ -21,16 +19,28 @@ export default function CategoryScreen({ goToHome }) {
   const [selectedExamIndex, setSelectedExamIndex] = useState(null);
   const [currentQuiz, setCurrentQuiz] = useState(null);
 
-  const allCategories = {
-    'General Knowledge': generalKnowledge,
-    Sports: sports,
-    IT: it,
-  };
+  const [categories, setCategories] = useState({
+    'General Knowledge': [],
+    Sports: [],
+    IT: [],
+  });
+  const [loading, setLoading] = useState(true);
 
   const perExam = 10;
   const FINAL_EXAM_QUESTIONS = 20;
 
-  /* Quiz Screen */
+  /* ---------------- FETCH DATA ---------------- */
+  useEffect(() => {
+    const loadData = async () => {
+      setLoading(true);
+      const data = await fetchAllCategories();
+      setCategories(data);
+      setLoading(false);
+    };
+    loadData();
+  }, []);
+
+  /* ---------------- QUIZ SCREEN ---------------- */
   if (currentQuiz) {
     return (
       <QuizScreen
@@ -40,9 +50,18 @@ export default function CategoryScreen({ goToHome }) {
     );
   }
 
-  /* Exam List Screen */
+  if (loading) {
+    return (
+      <View style={{ flex:1, justifyContent:'center', alignItems:'center' }}>
+        <ActivityIndicator size="large" color="#007bff" />
+        <Text>Loading quizzes...</Text>
+      </View>
+    );
+  }
+
+  /* ---------------- EXAM LIST SCREEN ---------------- */
   if (selectedCategory) {
-    const questions = allCategories[selectedCategory];
+    const questions = categories[selectedCategory];
     const totalQuestions = questions.length;
     const fullExams = Math.floor(totalQuestions / perExam);
     const remainingQuestions = totalQuestions % perExam;
@@ -52,13 +71,10 @@ export default function CategoryScreen({ goToHome }) {
 
     return (
       <ScrollView style={styles.container}>
-
         <Text style={styles.CategoryTitle}>Quiz Test App</Text>
         <Text style={styles.CategorySubtitle}>Select your Exam </Text>
-
         <Text style={styles.categoryCardTitle}>{selectedCategory}</Text>
 
-        {/* Normal Exams */}
         {exams.map((examIndex) => {
           const start = examIndex * perExam;
           const end = Math.min(start + perExam, totalQuestions);
@@ -78,7 +94,6 @@ export default function CategoryScreen({ goToHome }) {
           );
         })}
 
-        {/* Start Selected Exam */}
         {selectedExamIndex !== null && (
           <TouchableOpacity
             style={styles.startButton}
@@ -92,9 +107,10 @@ export default function CategoryScreen({ goToHome }) {
           </TouchableOpacity>
         )}
 
-        <Text style={styles.CategoryFinalBtnText}>It will best after practicing all exam text </Text>
+        <Text style={styles.CategoryFinalBtnText}>
+          It will best after practicing all exam text
+        </Text>
 
-        {/* 🔥 FINAL EXAM */}
         <TouchableOpacity
           style={styles.finalExamButton}
           onPress={() => {
@@ -110,38 +126,33 @@ export default function CategoryScreen({ goToHome }) {
           </Text>
         </TouchableOpacity>
 
-        {/* Back to Category List */}
         <TouchableOpacity onPress={() => setSelectedCategory(null)}>
           <Text style={styles.backButton}>← Back to Categories</Text>
         </TouchableOpacity>
-
       </ScrollView>
     );
   }
 
-  /* Category List Screen */
+  /* ---------------- CATEGORY LIST SCREEN ---------------- */
   return (
     <ScrollView style={styles.container}>
-
       <Text style={styles.CategoryTitle}>Quiz Test App</Text>
       <Text style={styles.CategorySubtitle}>Select your category for exam </Text>
 
-      {Object.keys(allCategories).map((category) => (
+      {Object.keys(categories).map((category) => (
         <TouchableOpacity
           key={category}
           style={styles.categoryCard}
           onPress={() => setSelectedCategory(category)}
         >
           <Text style={styles.categoryCardTitle}>{category}</Text>
-          <Text>Total Questions: {allCategories[category].length}</Text>
+          <Text>Total Questions: {categories[category].length}</Text>
         </TouchableOpacity>
       ))}
 
-      {/* Back to Home */}
       <TouchableOpacity onPress={goToHome}>
         <Text style={styles.backButton}>← Back to Home</Text>
       </TouchableOpacity>
-
     </ScrollView>
   );
 }
