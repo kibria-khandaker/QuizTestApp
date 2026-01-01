@@ -107,8 +107,8 @@ export default function QuizScreen({ questions, goBack }) {
   return (
     <ScrollView style={styles.container}>
 
-      <Text style={styles.QuestionTitle}>Quiz Test App</Text>
-      <Text style={styles.QuestionSubtitle}>Select your question for exam </Text>
+      <Text style={styles.QuestionTitle}>QuizTest App</Text>
+      <Text style={styles.QuestionSubtitle}>Select your right Answer </Text>
 
       {/* Header */}
       <View style={styles.header}>

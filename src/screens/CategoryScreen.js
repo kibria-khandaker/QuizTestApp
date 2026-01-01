@@ -77,7 +77,7 @@ export default function CategoryScreen({ goToHome }) {
 
     return (
       <ScrollView style={styles.container}>
-        <Text style={styles.CategoryTitle}>Quiz Test App</Text>
+        <Text style={styles.CategoryTitle}>QuizTest App</Text>
         <Text style={styles.CategorySubtitle}>Select your Exam</Text>
 
         <Text style={styles.categoryCardTitle}>{selectedCategory}</Text>
@@ -158,7 +158,7 @@ export default function CategoryScreen({ goToHome }) {
           onPress={() => setSelectedCategory(category)}
         >
           <Text style={styles.categoryCardTitle}>{category}</Text>
-          <Text>
+          <Text  style={styles.categoryCardSubTitle}>
             Total Questions: {categories[category].questions.length}
           </Text>
         </TouchableOpacity>

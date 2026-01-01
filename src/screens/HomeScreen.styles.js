@@ -9,31 +9,32 @@ export const styles = StyleSheet.create({
     padding: 20,
   },
   title: {
-    fontSize: 32,
+    fontSize: 28,
     fontWeight: 'bold',
     marginBottom: 10,
     textAlign: 'center',
+    color:'#1b55b6'
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: 14,
     marginBottom: 20,
     textAlign: 'center',
     color: '#555',
   },
   mainButton: {
-    backgroundColor: '#2196F3',
+    backgroundColor: '#1b55b6',
     padding: 15,
     borderRadius: 12,
     width: 200,
     alignItems: 'center',
   },
   aboutButton: {
-    backgroundColor: '#93afbaff',
+    backgroundColor: '#1b55b6',
     marginTop: 15,
   },
   mainButtonText: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
   },
 });

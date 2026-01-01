@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
-  container: { flex: 1, padding: 20 },
+  container: { flex: 1, padding: 20, backgroundColor: '#fff'},
 
   header: {
     flexDirection: 'row',
@@ -14,76 +14,76 @@ export default StyleSheet.create({
     borderRadius: 3,
   },
 
-  progress: { fontSize: 14, color: '#555' },
-
-  SoundToggleBtn: {
-    marginLeft: 10,
-    padding: 8,
-    borderRadius: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  soundToggleBtnSoundOn: {
-    backgroundColor: '#4CAF50',
-  },
-
-  soundToggleBtnSoundOff: {
-    backgroundColor: '#b9b9b9ff',
-  },
-
-
-
-
-
   QuestionTitle:{
       fontSize: 22,
       fontWeight: 'bold',
       marginBottom: 5,
       marginTop: 30,
       textAlign: 'center',
+      color: '#1b55b6',
   },
   QuestionSubtitle:{
-      fontSize: 16,
-      marginBottom: 25,
+      fontSize: 14,
+      marginBottom: 20,
       textAlign: 'center',
       color: '#555',
   },
 
-
   timer: {
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: 'bold',
     color: '#E91E63'
   },
 
   cancelText: {
+    fontSize: 12,
     color: '#F44336',
     fontWeight: 'bold'
   },
+  progress: { 
+    fontSize: 12, 
+    color: '#1b55b6' 
+  },
+  
+  SoundToggleBtn: {
+    marginLeft: 10,
+    padding: 4,
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  soundToggleBtnSoundOn: {
+    backgroundColor: '#1b55b6',
+  },
+
+  soundToggleBtnSoundOff: {
+    backgroundColor: '#b9b9b9ff',
+  },
 
   question: {
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: 'bold',
-    marginBottom: 20
+    marginBottom: 20,
+    color: '#1b55b6'
   },
 
   option: {
-    padding: 15,
-    marginVertical: 8,
+    padding: 12,
+    marginVertical: 5,
     backgroundColor: '#eee',
     borderRadius: 8
   },
 
-  optionText: { fontSize: 16 },
+  optionText: { fontSize: 14 },
 
-  correct: { backgroundColor: '#4CAF50' },
-  wrong: { backgroundColor: '#F44336' },
+  correct: { backgroundColor: '#5fc062ff' },
+  wrong: { backgroundColor: '#ff5a4fff' },
 
   answerText: {
     marginTop: 15,
-    fontSize: 16,
-    fontWeight: 'bold'
+    fontSize: 14,
+    color: '#4CAF50'
   },
 
   nextButton: {
@@ -92,10 +92,10 @@ export default StyleSheet.create({
     backgroundColor: '#007bff',
     borderRadius: 8
   },
-
+  
   nextText: {
     color: '#fff',
     fontWeight: 'bold',
-    textAlign: 'center'
+    textAlign: 'center',
   }
 });

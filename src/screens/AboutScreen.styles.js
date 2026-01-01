@@ -12,28 +12,42 @@ export const styles = StyleSheet.create({
     marginBottom: 10,
     alignSelf: 'flex-start',
     borderWidth: 1,
-    borderColor: '#939393ff',
+    borderColor: '#1b55b6',
     borderRadius: 4,
   },
   backButtonText: {
-    color: '#575f66ff',
-    fontSize: 16,
-    fontWeight: 'bold',
+    color: '#1b55b6',
+    fontSize: 14,
+    fontWeight: 500,
   },
   title: {
-    fontSize: 28,
+    fontSize: 22,
     fontWeight: 'bold',
     marginTop: 20,
     marginBottom: 10,
+    color: '#1b55b6',
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: 14,
     marginBottom: 20,
     color: '#555',
+    lineHeight: 22,
   },
   content: {
-    fontSize: 16,
+    fontSize: 14,
     marginBottom: 15,
     lineHeight: 22,
   },
+  developerLink:{
+    fontSize: 12,
+    marginTop: 15,
+    marginBottom: 20,
+  },
+  developerUrl:{
+    color: '#1b55b6',
+    fontWeight: 'bold',
+  },
+
+
+
 });

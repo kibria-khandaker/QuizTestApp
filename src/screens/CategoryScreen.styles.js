@@ -12,9 +12,10 @@ export const styles = StyleSheet.create({
       marginBottom: 5,
       marginTop: 30,
       textAlign: 'center',
+      color: '#1b55b6',
   },
   CategorySubtitle:{
-      fontSize: 16,
+      fontSize: 14,
       marginBottom: 20,
       textAlign: 'center',
       color: '#555',
@@ -23,11 +24,11 @@ export const styles = StyleSheet.create({
       fontSize: 14,
       marginTop: 50,
       textAlign: 'center',
-      color: '#555',
+      color: '#1b55b6',
   },
   categoryCard: {
     backgroundColor: '#fff',
-    padding: 15,
+    padding: 10,
     marginBottom: 15,
     borderRadius: 10,
     shadowColor: '#000',
@@ -36,37 +37,41 @@ export const styles = StyleSheet.create({
     elevation: 3,
   },
   categoryCardTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: 16,
+    fontWeight: 500,
     marginBottom: 5,
+    color: '#1b55b6',
   },
-
+  categoryCardSubTitle:{
+    fontSize: 12,
+  },
   backButton: {
     padding: 7,
     marginTop: 20,
     marginBottom: 10,
     alignSelf: 'flex-start',
     borderWidth: 1,
-    borderColor: '#939393ff',
     borderRadius: 4,
-    color: '#575f66ff',
-    fontSize: 16,
-    fontWeight: 'bold',
+    color: '#1b55b6',
+    fontSize: 14,
+    fontWeight: 500,
+    borderColor: '#1b55b6',
   },
 
   examButton: {
-    padding: 12,
-    backgroundColor: '#eee',
-    borderRadius: 8,
-    marginBottom: 10,
+    padding: 8,
+    backgroundColor: '#e1ecffff',
+    borderRadius: 5,
+    marginBottom: 8,
   },
 
   examSelected: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#89ff8fff',
   },
 
   examText: {
-    fontSize: 16,
+    fontSize: 14,
+    color: '#555',
   },
 
   startButton: {
