@@ -9,8 +9,8 @@ export const styles = StyleSheet.create({
     padding: 20,
   },
   logo: {
-    width: 100,       // width adjust
-    height: 100,      // height adjust
+    width: 110,       // width adjust
+    height: 110,      // height adjust
     marginBottom: 0, // title এর আগে space
     alignSelf: 'center',
   },

@@ -54,7 +54,7 @@ export default function AboutScreen({ goBack }) {
       </Text>
 
       <Text style={styles.developerLink}>
-        Developed by:{' '}
+        Contributed :{' '}
         <Text
           style={styles.developerUrl}
           onPress={() => openLink('https://www.netkib.com')}

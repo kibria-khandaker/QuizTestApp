@@ -119,7 +119,16 @@ npx create-expo-app QuizTestApp --template tabs
 
 3. Run the app (Expo):
 ```
+# Run the app
 npx expo start
+
+# Update App
+eas build -p android --profile preview
+
+# change before Update code run
+"version": "x", 
+"versionCode": x
+
 ```
 
 4. Open on your device:
