@@ -7,6 +7,7 @@ import {
   Linking,
   Alert,
 } from 'react-native';
+import Constants from 'expo-constants'; // updated
 import { styles } from './AboutScreen.styles';
 
 export default function AboutScreen({ goBack }) {
@@ -22,6 +23,10 @@ export default function AboutScreen({ goBack }) {
       Alert.alert('Error', 'Something went wrong while opening the link');
     }
   };
+
+  // ✅ Expo SDK 49+ safe
+  const appVersion = Constants.expoConfig?.version || '1.0.0';
+  const androidCode = Constants.expoConfig?.android?.versionCode || '1';
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -68,6 +73,14 @@ export default function AboutScreen({ goBack }) {
       <TouchableOpacity style={styles.backButton} onPress={goBack}>
         <Text style={styles.backButtonText}>← Back to Home</Text>
       </TouchableOpacity>
+
+
+      <View style={{ marginTop: 20 }}>
+        <Text style={{ fontSize: 14, color: '#666', textAlign: 'center' }}>
+          App Version: {appVersion} (Code: {androidCode})
+        </Text>
+      </View>
+      
     </ScrollView>
   );
 }

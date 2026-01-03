@@ -2,9 +2,9 @@
   "expo": {
     "name": "QuizTestApp",
     "slug": "QuizTestApp",
-    "version": "1.0.2",
+    "version": "1.0.5",   
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/icon.png",   
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "cli": {
@@ -16,16 +16,16 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/adaptive-icon.png",  
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
       "package": "com.qa.kibria.QuizTestApp",
-      "versionCode": 2
+      "versionCode": 5 
     },
     "web": {
       "favicon": "./assets/favicon.png"

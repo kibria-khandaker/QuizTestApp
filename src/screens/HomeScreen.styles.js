@@ -8,16 +8,22 @@ export const styles = StyleSheet.create({
     backgroundColor: '#f9f9f9',
     padding: 20,
   },
+  logo: {
+    width: 100,       // width adjust
+    height: 100,      // height adjust
+    marginBottom: 0, // title এর আগে space
+    alignSelf: 'center',
+  },
   title: {
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: 0,
     textAlign: 'center',
     color:'#1b55b6'
   },
   subtitle: {
     fontSize: 14,
-    marginBottom: 20,
+    marginBottom: 15,
     textAlign: 'center',
     color: '#555',
   },
